@@ -1,6 +1,8 @@
+import java.io.Serializable;
+import java.util.Map;
 import java.util.TreeMap;
 
-public class FatGlobal {
+public class FatGlobal implements Serializable {
 
     private TreeMap<String, Faturacao> fatGlobal;
 
@@ -12,30 +14,32 @@ public class FatGlobal {
         this.fatGlobal = tree;
     }
 
-/*precisa do get
     public FatGlobal(FatGlobal fatGlobal) {
         this.fatGlobal = fatGlobal.getFatGlobal();
     }
 
-Map cannot be resolved
     public TreeMap<String, Faturacao> getFatGlobal() {
         TreeMap<String, Faturacao> fatGlobal = new TreeMap<>();
 
-        for(Map.Entry<String, Faturacao> entry : fatGlobal.entrySet()){
+        for(Map.Entry<String, Faturacao> entry : this.fatGlobal.entrySet()){
             String key = entry.getKey();
             Faturacao fat = new Faturacao(entry.getValue());
 
-            fatGlobal.add(key, fat);
+            fatGlobal.put(key, fat);
         }
         return fatGlobal;
     }
 
-//idk if work
     public void setFatGlobal(TreeMap<String, Faturacao> fatGlobal) {
         this.fatGlobal = new TreeMap<>();
-        fatGlobal.forEach(s -> {this.fatGlobal.add(s);});
+        for(Map.Entry<String, Faturacao> entry : fatGlobal.entrySet()){
+            String key = entry.getKey();
+            Faturacao fat = new Faturacao(entry.getValue());
+
+            this.fatGlobal.put(key, fat);
+        }
     }
-*/
+
     public Faturacao getFaturacao(String key) {
         Faturacao fat = this.fatGlobal.get(key);
         return fat;
@@ -45,10 +49,8 @@ Map cannot be resolved
         this.fatGlobal.put(key,value);
     }
 
-/*precisa do construtor
     public FatGlobal clone() {
         return new FatGlobal(this);
     }
-*/
 }
 

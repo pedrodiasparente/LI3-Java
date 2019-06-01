@@ -1,8 +1,6 @@
-import java.util.TreeMap;
+import java.io.Serializable;
 
-import static java.util.Arrays.fill;
-
-public class Faturacao {
+public class Faturacao implements Serializable {
 
     private int[][] nVendasP = new int[3][12];
     private int[][] nVendasN = new int[3][12];

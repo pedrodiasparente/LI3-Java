@@ -1,6 +1,7 @@
+import java.io.Serializable;
 import java.util.TreeSet;
 
-public class Cat_Produtos {
+public class Cat_Produtos implements Serializable {
 
     private TreeSet<String> produtos;
 

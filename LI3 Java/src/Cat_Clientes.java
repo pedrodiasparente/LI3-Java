@@ -1,8 +1,7 @@
-import org.omg.CosNaming.NamingContextExtPackage.StringNameHelper;
-
+import java.io.Serializable;
 import java.util.TreeSet;
 
-public class Cat_Clientes {
+public class Cat_Clientes implements Serializable {
 
     private TreeSet<String> clientes;
 

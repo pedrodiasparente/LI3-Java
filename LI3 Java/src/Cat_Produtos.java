@@ -35,6 +35,10 @@ public class Cat_Produtos implements Serializable {
         this.produtos.add(value);
     }
 
+    public boolean lookup(String prod) {
+        return this.produtos.contains(prod);
+    }
+
     public Cat_Produtos clone() {
         return new Cat_Produtos(this);
     }

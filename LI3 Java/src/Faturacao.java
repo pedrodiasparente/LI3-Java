@@ -45,19 +45,19 @@ public class Faturacao implements Serializable {
     }
 
     public int[][] getnVendasP() {
-        return nVendasP;
+        return this.nVendasP;
     }
 
     public int[][] getnVendasN() {
-        return nVendasN;
+        return this.nVendasN;
     }
 
     public float[][] getPrecoTotalP() {
-        return precoTotalP;
+        return this.precoTotalP;
     }
 
     public float[][] getPrecoTotalN() {
-        return precoTotalN;
+        return this.precoTotalN;
     }
 
     public void setnVendasP(int[][] nVendasP) {

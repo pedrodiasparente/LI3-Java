@@ -35,6 +35,10 @@ public class Cat_Clientes implements Serializable {
         this.clientes.add(value);
     }
 
+    public boolean lookup(String client) {
+        return this.clientes.contains(client);
+    }
+
     public Cat_Clientes clone() {
         return new Cat_Clientes(this);
     }

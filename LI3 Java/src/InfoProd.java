@@ -1,22 +1,24 @@
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class InfoProd implements Serializable {
 
-    private List<Integer> quantP;
-    private List<Integer> quantN;
-    private List<Float> precoP;
-    private List<Float> precoN;
+    private int[] quantP;
+    private int[] quantN;
+    private double[] precoP;
+    private double[] precoN;
 
     public InfoProd () {
-        this.quantP = new ArrayList<>();
-        this.quantN = new ArrayList<>();
-        this.precoP = new ArrayList<>();
-        this.precoN = new ArrayList<>();
+        this.quantP = new int[12];
+        this.quantN = new int[12];
+        this.precoP = new double[12];
+        this.precoN = new double[12];
     }
 
-    public InfoProd (List<Integer> quantP, List<Integer> quantN, List<Float> precoP, List<Float> precoN) {
+    public InfoProd (int[] quantP, int[] quantN, double[] precoP, double[] precoN) {
         this.quantP = quantP;
         this.quantN = quantN;
         this.precoP = precoP;
@@ -29,53 +31,49 @@ public class InfoProd implements Serializable {
         this.precoN = o.getPrecoN();
      }
 
-     public List<Integer> getQuantP() {
-        ArrayList<Integer> newArray = new ArrayList<>(this.quantP);
-        return newArray;
+     public int[] getQuantP() {
+        return quantP;
      }
 
-     public int getQuantPMes(int i) { return this.quantP.get(i); }
+     public int getQuantPMes(int i) { return this.quantP[i]; }
 
-     public List<Integer> getQuantN() {
-        ArrayList<Integer> newArray = new ArrayList<>(this.quantN);
-        return newArray;
+     public int[] getQuantN() {
+        return quantN;
      }
 
     public int getQuantNMes(int i) {
-        return this.quantN.get(i);
+        return this.quantN[i];
     }
 
-    public List<Float> getPrecoP() {
-        ArrayList<Float> newArray = new ArrayList<>(this.precoP);
-        return newArray;
+    public double[] getPrecoP() {
+        return precoP;
     }
 
-    public float getPrecoPMes(int i) {
-        return this.precoP.get(i);
+    public double getPrecoPMes(int i) {
+        return this.precoP[i];
     }
 
-    public List<Float> getPrecoN() {
-        ArrayList<Float> newArray = new ArrayList<>(this.precoN);
-        return newArray;
+    public double[] getPrecoN() {
+        return precoN;
     }
 
-    public float getPrecoNMes(int i) {
-        return this.precoN.get(i);
+    public double getPrecoNMes(int i) {
+        return this.precoN[i];
     }
 
-    public void setQuantP(List<Integer> q) {
+    public void setQuantP(int[] q) {
         this.quantP = q;
     }
 
-    public void setQuantN(List<Integer> q) {
+    public void setQuantN(int[] q) {
         this.quantN = q;
     }
 
-    public void setPrecoP(List<Float> q) {
+    public void setPrecoP(double[] q) {
         this.precoP = q;
     }
 
-    public void setPrecoN(List<Float> q) {
+    public void setPrecoN(double[] q) {
         this.precoN = q;
     }
 
@@ -98,4 +96,20 @@ public class InfoProd implements Serializable {
         return new InfoProd(this);
     }
 
+    public void addVendaToProd(String vendaString){
+        String venda[];
+        int mes;
+
+        venda = vendaString.split(" ");
+        mes = Integer.parseInt(venda[5])-1;
+
+        if(venda[3].equals("N")){
+            this.precoN[mes] = Double.parseDouble(venda[1]);
+            this.quantN[mes] = Integer.parseInt(venda[2]);
+        }
+        else {
+            this.precoP[mes] = Double.parseDouble(venda[1]);
+            this.quantP[mes] =  Integer.parseInt(venda[2]);
+        }
+    }
 }

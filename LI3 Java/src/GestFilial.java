@@ -37,7 +37,8 @@ public class GestFilial implements Serializable {
         this.clientes = c;
     }
 
-    public void addCliente (String client, TreeMap<String,InfoProd> value) {
+    public void addCliente (String client) {
+        TreeMap<String,InfoProd> value = new TreeMap<>();
         this.clientes.put(client, value);
     }
 
@@ -57,5 +58,18 @@ public class GestFilial implements Serializable {
 
     public GestFilial clone(){
         return new GestFilial(this);
+    }
+
+    public void addVenda(String vendaString){
+        String venda[];
+
+        venda = vendaString.split(" ");
+        if(this.clientes.get(venda[4]).containsKey(venda[0]))
+            this.clientes.get(venda[4]).get(venda[0]).addVendaToProd(vendaString);
+        else {
+            InfoProd infoProd = new InfoProd();
+            infoProd.addVendaToProd(vendaString);
+            this.clientes.get(venda[4]).put(venda[0], infoProd);
+        }
     }
 }

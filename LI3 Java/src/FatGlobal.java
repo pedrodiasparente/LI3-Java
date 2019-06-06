@@ -52,5 +52,11 @@ public class FatGlobal implements Serializable {
     public FatGlobal clone() {
         return new FatGlobal(this);
     }
+
+    public void addVenda(String vendaString){
+        String venda[];
+        venda = vendaString.split(" ");
+        this.fatGlobal.get(venda[0]).addToFat(vendaString);
+    }
 }
 

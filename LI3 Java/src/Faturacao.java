@@ -4,8 +4,8 @@ public class Faturacao implements Serializable {
 
     private int[][] nVendasP = new int[3][12];
     private int[][] nVendasN = new int[3][12];
-    private float[][] precoTotalP = new float[3][12];
-    private float[][] precoTotalN = new float[3][12];
+    private double[][] precoTotalP = new double[3][12];
+    private double[][] precoTotalN = new double[3][12];
 
     public Faturacao () {
         for (int i = 0; i < nVendasP.length; i++) {
@@ -30,7 +30,7 @@ public class Faturacao implements Serializable {
         }
     }
 
-    public Faturacao(int[][] nvendasP, int[][] nVendasN, float[][] precoTotalP, float[][] precoTotalN) {
+    public Faturacao(int[][] nvendasP, int[][] nVendasN, double[][] precoTotalP, double[][] precoTotalN) {
         this.nVendasP = nvendasP;
         this.nVendasN = nVendasN;
         this.precoTotalP = precoTotalP;
@@ -52,11 +52,11 @@ public class Faturacao implements Serializable {
         return this.nVendasN;
     }
 
-    public float[][] getPrecoTotalP() {
+    public double[][] getPrecoTotalP() {
         return this.precoTotalP;
     }
 
-    public float[][] getPrecoTotalN() {
+    public double[][] getPrecoTotalN() {
         return this.precoTotalN;
     }
 
@@ -68,11 +68,11 @@ public class Faturacao implements Serializable {
         this.nVendasN = nVendasN;
     }
 
-    public void setPrecoTotalP(float[][] precoTotalP) {
+    public void setPrecoTotalP(double[][] precoTotalP) {
         this.precoTotalP = precoTotalP;
     }
 
-    public void setPrecoTotalN(float[][] precoTotalN) {
+    public void setPrecoTotalN(double[][] precoTotalN) {
         this.precoTotalN = precoTotalN;
     }
 
@@ -111,5 +111,23 @@ public class Faturacao implements Serializable {
             }
         }
         return aux;
+    }
+
+    public void addToFat(String vendaString){
+        String venda[];
+        int filial, mes;
+
+        venda = vendaString.split(" ");
+        filial = Integer.parseInt(venda[6])-1;
+        mes = Integer.parseInt(venda[6])-1;
+
+        if(venda[3].equals("N")){
+            this.precoTotalN[filial][mes] = Double.parseDouble(venda[1]);
+            this.nVendasN[filial][mes] = Integer.parseInt(venda[2]);
+        }
+        if(venda[3].equals("P")){
+            this.precoTotalP[filial][mes] = Double.parseDouble(venda[1]);
+            this.nVendasP[filial][mes] = Integer.parseInt(venda[2]);
+        }
     }
 }

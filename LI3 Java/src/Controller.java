@@ -1,3 +1,5 @@
+import java.io.*;
+
 public class Controller implements InterfGereVendasControlador{
 
     private Model model;
@@ -29,5 +31,32 @@ public class Controller implements InterfGereVendasControlador{
             }
         } while (view.getOP()!=0);
         System.out.println("See ya next time, partner...");
+    }
+
+    public void saveController(String fich){
+        try{
+            ObjectOutputStream oout = new ObjectOutputStream(new FileOutputStream(fich));
+            oout.writeObject(this);
+            oout.flush();
+            oout.close();
+        } catch(IOException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    public Controller readEstado(String fich){
+        Controller s = new Controller();
+        try {
+            ObjectInputStream oin = new ObjectInputStream(new FileInputStream(fich));
+            s = (Controller) oin.readObject();
+            oin.close();
+        } catch(FileNotFoundException e) {
+            System.out.println(e.getMessage());
+        } catch(IOException e){
+            System.out.println(e.getMessage());
+        } catch(ClassNotFoundException e){
+            System.out.println(e.getMessage());
+        }
+        return s;
     }
 }

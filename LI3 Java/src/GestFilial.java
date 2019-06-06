@@ -1,4 +1,5 @@
 import java.io.Serializable;
+import java.util.Map;
 import java.util.TreeMap;
 
 public class GestFilial implements Serializable {
@@ -18,7 +19,18 @@ public class GestFilial implements Serializable {
     }
 
     public TreeMap<String,TreeMap<String, InfoProd>> getClientes() {
-        return this.clientes;
+        TreeMap<String,TreeMap<String,InfoProd>> res = new TreeMap<>();
+        for(Map.Entry<String,TreeMap<String,InfoProd>> s: this.clientes.entrySet()){
+            String key = s.getKey();
+            TreeMap<String,InfoProd> aux = new TreeMap<>();
+            for(Map.Entry<String,InfoProd> t: this.clientes.get(key).entrySet()) {
+                String key2 = t.getKey();
+                InfoProd value = t.getValue().clone();
+                aux.put(key2,value);
+            }
+            res.put(key,aux);
+        }
+        return res;
     }
 
     public void setClientes(TreeMap<String,TreeMap<String, InfoProd>> c) {
@@ -30,11 +42,17 @@ public class GestFilial implements Serializable {
     }
 
     public TreeMap<String,InfoProd> getProdutos(String client) {
-        return this.clientes.get(client);
+        TreeMap<String,InfoProd> res = new TreeMap<>();
+        for(Map.Entry<String,InfoProd> s: this.clientes.get(client).entrySet()){
+            String key = s.getKey();
+            InfoProd value = s.getValue().clone();
+            res.put(key,value);
+        }
+        return res;
     }
 
     public void addProduto (String cliente, String produto, InfoProd value) {
-        getProdutos(cliente).put(produto, value);
+        getProdutos(cliente).put(produto, value.clone());
     }
 
     public GestFilial clone(){

@@ -23,7 +23,7 @@ public class FatGlobal implements Serializable {
 
         for(Map.Entry<String, Faturacao> entry : this.fatGlobal.entrySet()){
             String key = entry.getKey();
-            Faturacao fat = new Faturacao(entry.getValue());
+            Faturacao fat = new Faturacao(entry.getValue().clone());
 
             fatGlobal.put(key, fat);
         }
@@ -34,19 +34,19 @@ public class FatGlobal implements Serializable {
         this.fatGlobal = new TreeMap<>();
         for(Map.Entry<String, Faturacao> entry : fatGlobal.entrySet()){
             String key = entry.getKey();
-            Faturacao fat = new Faturacao(entry.getValue());
+            Faturacao fat = new Faturacao(entry.getValue().clone());
 
             this.fatGlobal.put(key, fat);
         }
     }
 
     public Faturacao getFaturacao(String key) {
-        Faturacao fat = this.fatGlobal.get(key);
+        Faturacao fat = this.fatGlobal.get(key).clone();
         return fat;
     }
 
     public void add (String key, Faturacao value) {
-        this.fatGlobal.put(key,value);
+        this.fatGlobal.put(key,value.clone());
     }
 
     public FatGlobal clone() {

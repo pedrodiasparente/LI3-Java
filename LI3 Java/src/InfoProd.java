@@ -30,19 +30,37 @@ public class InfoProd implements Serializable {
      }
 
      public List<Integer> getQuantP() {
-        return this.quantP;
+        ArrayList<Integer> newArray = new ArrayList<>(this.quantP);
+        return newArray;
      }
+
+     public int getQuantPMes(int i) { return this.quantP.get(i); }
 
      public List<Integer> getQuantN() {
-        return this.quantN;
+        ArrayList<Integer> newArray = new ArrayList<>(this.quantN);
+        return newArray;
      }
 
+    public int getQuantNMes(int i) {
+        return this.quantN.get(i);
+    }
+
     public List<Float> getPrecoP() {
-        return this.precoP;
+        ArrayList<Float> newArray = new ArrayList<>(this.precoP);
+        return newArray;
+    }
+
+    public float getPrecoPMes(int i) {
+        return this.precoP.get(i);
     }
 
     public List<Float> getPrecoN() {
-        return this.precoN;
+        ArrayList<Float> newArray = new ArrayList<>(this.precoN);
+        return newArray;
+    }
+
+    public float getPrecoNMes(int i) {
+        return this.precoN.get(i);
     }
 
     public void setQuantP(List<Integer> q) {
@@ -56,18 +74,20 @@ public class InfoProd implements Serializable {
     public void setPrecoP(List<Float> q) {
         this.precoP = q;
     }
+
     public void setPrecoN(List<Float> q) {
         this.precoN = q;
     }
 
-    /*no trabalho de C o getQuant tá definido de maneira diferente, como fazer?
+/*
     private void somaProdInfo(InfoProd produtoData, InfoProd newProduto){
         int i;
 
         for(i = 0; i < 12; i++)
-            setQuant(produtoData, i, getQuant(newProduto, i, 'N'), 'N');
+            produtoData.setQuantN();
+            setQuant(produtoData, i, getQuantN(newProduto, i, 'N'), 'N');
         for(i = 0; i < 12; i++)
-            setQuant(produtoData, i, getQuant(newProduto, i, 'P'), 'P');
+            setQuant(produtoData, i, getQuantP(newProduto, i, 'P'), 'P');
         for(i = 0; i < 12; i++)
             setPrecoGF(produtoData, i, getPrecoGF(newProduto, i, 'N'), 'N');
         for(i = 0; i < 12; i++)

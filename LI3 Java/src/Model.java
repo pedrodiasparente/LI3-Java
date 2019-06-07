@@ -1,7 +1,9 @@
-import java.util.ArrayList;
 import java.io.*;
+import java.util.AbstractMap;
 import java.util.HashMap;
+import java.util.TreeMap;
 import java.util.Map;
+import java.util.TreeSet;
 
 public class Model implements InterfGereVendasModel{
     private Cat_Produtos produtos;
@@ -181,6 +183,91 @@ public class Model implements InterfGereVendasModel{
         } catch(IOException e) {
             System.out.println(e.getMessage());
         }
+    }
+
+    public Cat_Produtos query1() {
+        int val;
+        Cat_Produtos p = new Cat_Produtos();
+        TreeSet<String> t = new TreeSet<>();
+        for(Map.Entry<String,Faturacao> m : this.fatGlobal.getFatGlobal().entrySet()) {
+            val = 0;
+            //nuno isto devia funcionar mas nao está
+            for (int i = 0; i < 3; i++) {
+                for (int j = 0; j < 12; j++) {
+                    if (m.getValue().getnVendasP()[i][j] != 0) val = 1;
+                    if (m.getValue().getnVendasN()[i][j] != 0) val = 1;
+                }
+            }
+            if (val == 0) {
+                t.add(m.getKey());
+
+            }
+            else ;//System.out.println(m.getKey());
+        }
+        p.setProdutos(t);
+        return p;
+    }
+
+    public AbstractMap.SimpleEntry<Integer,Integer> query2Filial(int mes, int filial){
+        int quantVendas = 0;
+        int quantClientes = 0;
+        int trigger = 0;
+        for(Map.Entry<String,Faturacao> m : this.fatGlobal.getFatGlobal().entrySet()){
+            quantVendas += m.getValue().getnVendasP()[filial-1][mes-1];
+            quantVendas += m.getValue().getnVendasN()[filial-1][mes-1];
+        }
+        for(Map.Entry<String,TreeMap<String,InfoProd>> m : this.gestFilial.get(filial-1).getClientes().entrySet()){
+            for(Map.Entry<String,InfoProd> t : m.getValue().entrySet()) {
+                if(t.getValue().getQuantPMes(mes) != 0 && trigger == 0) {
+                    quantClientes ++;
+                    trigger = 1;
+                    break;
+                }
+                if(t.getValue().getQuantNMes(mes) != 0 && trigger == 0) {
+                    quantClientes ++;
+                    trigger = 1;
+                    break;
+                }
+                if(trigger == 1) break;
+            }
+            trigger = 0;
+        }
+        AbstractMap.SimpleEntry<Integer,Integer> par = new AbstractMap.SimpleEntry<>(quantVendas,quantClientes);
+        return par;
+    }
+
+    public AbstractMap.SimpleEntry<Integer,Integer> query2Total(int mes){
+        int quantVendas = 0;
+        int quantClientes;
+        Cat_Clientes c = new Cat_Clientes();
+        int trigger = 0;
+        for(Map.Entry<String,Faturacao> m : this.fatGlobal.getFatGlobal().entrySet()){
+            for(int i = 0; i < 3; i++) {
+                quantVendas += m.getValue().getnVendasP()[i][mes - 1];
+                quantVendas += m.getValue().getnVendasN()[i][mes - 1];
+            }
+        }
+        for (int i = 0; i < 3; i++) {
+            for (Map.Entry<String, TreeMap<String, InfoProd>> m : this.gestFilial.get(i).getClientes().entrySet()) {
+                String key = m.getKey();
+                for (Map.Entry<String, InfoProd> t : m.getValue().entrySet()) {
+                    if (t.getValue().getQuantPMes(mes) != 0 && trigger == 0) {
+                        c.add(key);
+                        trigger = 1;
+                        break;
+                    }
+                    if (t.getValue().getQuantNMes(mes) != 0 && trigger == 0) {
+                        c.add(key);
+                        trigger = 1;
+                        break;
+                    }
+                    if (trigger == 1) break;
+                }
+                trigger = 0;
+            }
+        }
+        quantClientes = c.getClientes().size();
+        return new AbstractMap.SimpleEntry<>(quantVendas,quantClientes);
     }
 }
 

@@ -6,7 +6,7 @@ public class MainMenuView implements InterfGereVendasView{
     private List<String> opcoes;
 
     public MainMenuView(){
-        String[] options = {"Ler dos Logs", "xixi"};
+        String[] options = {"Ler dos Logs","query1","query2"};
         this.opcoes = Arrays.asList(options);
         this.op = 0;
     }

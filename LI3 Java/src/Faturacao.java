@@ -122,12 +122,12 @@ public class Faturacao implements Serializable {
         mes = Integer.parseInt(venda[6])-1;
 
         if(venda[3].equals("N")){
-            this.precoTotalN[filial][mes] = Double.parseDouble(venda[1]);
-            this.nVendasN[filial][mes] = Integer.parseInt(venda[2]);
+            this.precoTotalN[filial][mes] += Double.parseDouble(venda[1]) * Integer.parseInt(venda[2]);
+            this.nVendasN[filial][mes]++;
         }
         if(venda[3].equals("P")){
-            this.precoTotalP[filial][mes] = Double.parseDouble(venda[1]);
-            this.nVendasP[filial][mes] = Integer.parseInt(venda[2]);
+            this.precoTotalP[filial][mes] += Double.parseDouble(venda[1]) * Integer.parseInt(venda[2]);
+            this.nVendasP[filial][mes]++;
         }
     }
 }

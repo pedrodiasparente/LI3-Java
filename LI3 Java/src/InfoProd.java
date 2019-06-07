@@ -104,11 +104,11 @@ public class InfoProd implements Serializable {
         mes = Integer.parseInt(venda[5])-1;
 
         if(venda[3].equals("N")){
-            this.precoN[mes] = Double.parseDouble(venda[1]);
+            this.precoN[mes] += Double.parseDouble(venda[1]) * Integer.parseInt(venda[2]);
             this.quantN[mes] = Integer.parseInt(venda[2]);
         }
         else {
-            this.precoP[mes] = Double.parseDouble(venda[1]);
+            this.precoP[mes] += Double.parseDouble(venda[1]) * Integer.parseInt(venda[2]);
             this.quantP[mes] =  Integer.parseInt(venda[2]);
         }
     }

@@ -1,4 +1,6 @@
 import java.io.*;
+import java.util.Iterator;
+import java.util.Scanner;
 
 public class Controller implements InterfGereVendasControlador{
 
@@ -26,8 +28,31 @@ public class Controller implements InterfGereVendasControlador{
                     System.out.println("heyo");
                     break;
                 case 2:
-                    System.out.println("coco");
+                    //nuno nao sei como é para fazer sobre onde imprimir as coisas
+                    Cat_Produtos p = new Cat_Produtos(this.model.query1());
+                    Iterator<String> it = p.getProdutos().iterator();
+
+                    while (it.hasNext()) {
+                        System.out.println(it.next());
+                    }
+                    System.out.println(p.getProdutos().size());
                     break;
+                case 3:
+                    System.out.println("Insira mês");
+                    Scanner is = new Scanner(System.in);
+                    int mes = is.nextInt();
+                    int query2Vendas1 = this.model.query2Filial(mes,1).getKey();
+                    int query2Clientes1 = this.model.query2Filial(mes,1).getValue();
+                    int query2Vendas2 = this.model.query2Filial(mes,2).getKey();
+                    int query2Clientes2 = this.model.query2Filial(mes,2).getValue();
+                    int query2Vendas3 = this.model.query2Filial(mes,3).getKey();
+                    int query2Clientes3 = this.model.query2Filial(mes,3).getValue();
+                    int query2TotalVendas = this.model.query2Total(mes).getKey();
+                    int query2TotalClientes = this.model.query2Total(mes).getValue();
+                    System.out.println("Geral: " + query2TotalVendas + " " + query2TotalClientes);
+                    System.out.println("Filial 1: " + query2Vendas1 + " " + query2Clientes1);
+                    System.out.println("Filial 2: " + query2Vendas2 + " " + query2Clientes2);
+                    System.out.println("Filial 3: " + query2Vendas3 + " " + query2Clientes3);
             }
         } while (view.getOP()!=0);
         System.out.println("See ya next time, partner...");

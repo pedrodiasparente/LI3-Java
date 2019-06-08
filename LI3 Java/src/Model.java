@@ -352,5 +352,31 @@ public class Model implements InterfGereVendasModel{
 
         return ret;
     }
+
+    public List<AbstractMap.SimpleEntry<String, Double>> query7(int filial) {
+        double fat = 0;
+        List<AbstractMap.SimpleEntry<String, Double>> l = new ArrayList<>();
+        Map<Double, String> lista = new TreeMap<>(new CompareDouble());
+        for (Map.Entry<String, TreeMap<String, InfoProd>> m : this.gestFilial.get(filial).getClientes().entrySet()) {
+            for (Map.Entry<String, InfoProd> t : m.getValue().entrySet()) {
+                for (int i = 0; i < 12; i++) {
+                    fat += t.getValue().getPrecoP()[i] + t.getValue().getPrecoN()[i];
+                }
+            }
+            lista.put(fat, m.getKey());
+            fat = 0;
+        }
+
+        int j = 0;
+        for (Map.Entry<Double,String> aux: lista.entrySet()) {
+            if (j==3) break;
+            AbstractMap.SimpleEntry<String,Double> par = new AbstractMap.SimpleEntry<>(aux.getValue(),aux.getKey());
+            l.add(par);
+            j++;
+        }
+
+        return l;
+
+    }
 }
 

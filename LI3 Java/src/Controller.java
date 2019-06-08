@@ -26,18 +26,12 @@ public class Controller implements InterfGereVendasControlador{
             switch (view.getOP()){
                 case 1:
                     Crono.start();
-                    System.out.println("heyo");
-                    Crono.stop();
-                    System.out.println(Crono.print());
-                    break;
-                case 2:
-                    Crono.start();
                     this.view.outQuery1(this.model.query1());
                     Crono.stop();
                     System.out.println(Crono.print());
                     break;
-                case 3:
-                    int mes = this.view.inQuery2();
+                case 2:
+                    int mes = this.view.inQueryMes();
                     Crono.start();
                     this.view.outQuery2(this.model.query2Total(mes), "Geral: ");
                     this.view.outQuery2(this.model.query2Filial(mes,1), "Filial 1: ");
@@ -46,26 +40,48 @@ public class Controller implements InterfGereVendasControlador{
                     Crono.stop();
                     System.out.println(Crono.print());
                     break;
-                case 4:
+                case 3:
                     String cliente = this.view.inQueryCliente();
                     Crono.start();
                     this.view.outQuery3or4(this.model.query3(cliente));
                     Crono.stop();
                     System.out.println(Crono.print());
                     break;
-                case 5:
+                case 4:
                     String prod = this.view.inQueryProduto();
                     Crono.start();
                     this.view.outQuery3or4(this.model.query4(prod));
                     Crono.stop();
                     System.out.println(Crono.print());
                     break;
-                case 6:
+                case 5:
                     cliente = this.view.inQueryCliente();
                     Crono.start();
                     this.view.outQuery5(this.model.query5(cliente));
                     Crono.stop();
                     System.out.println(Crono.print());
+                case 6:
+                    break;
+                case 7:
+                    Crono.start();
+                    this.view.outQuery7(this.model.query7(0), 1);
+                    this.view.outQuery7(this.model.query7(1), 2);
+                    this.view.outQuery7(this.model.query7(2), 3);
+                    Crono.stop();
+                    System.out.println(Crono.print());
+                    break;
+                case 8:
+                    break;
+                case 9:
+                    break;
+                case 10:
+                    break;
+                case 11:
+                    Crono.start();
+                    System.out.println("heyo");
+                    Crono.stop();
+                    System.out.println(Crono.print());
+                    break;
             }
         } while (view.getOP()!=0);
         System.out.println("See ya next time, partner...");

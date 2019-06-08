@@ -6,7 +6,7 @@ public class MainMenuView implements InterfGereVendasView{
     private List<String> opcoes;
 
     public MainMenuView(){
-        String[] options = {"Ler dos Logs","query1","query2", "query3", "query4", "query5"};
+        String[] options = {"query1","query2", "query3", "query4", "query5", "query6", "query7", "query8", "query9", "query10", "Ler dos Logs"};
         this.opcoes = Arrays.asList(options);
         this.op = 0;
     }
@@ -57,7 +57,7 @@ public class MainMenuView implements InterfGereVendasView{
         System.out.println(p.getProdutos().size());
     }
 
-    public int inQuery2(){
+    public int inQueryMes(){
         System.out.println("Insira mês");
         return Input.lerInt();
     }
@@ -90,6 +90,13 @@ public class MainMenuView implements InterfGereVendasView{
     public void outQuery5(TreeSet<QuantidadeProduto> t){
         for (QuantidadeProduto q: t) {
             System.out.println("Produto: " + q.getProduto() + " Quantidade: " + q.getQuantidade());
+        }
+    }
+
+    public void outQuery7(List<AbstractMap.SimpleEntry<String, Double>> l, int filial){
+        System.out.println("Filial " + filial);
+        for(AbstractMap.SimpleEntry<String, Double> s: l){
+            System.out.println("Cliente " + s.getKey() + " Faturacao: " + s.getValue());
         }
     }
 }

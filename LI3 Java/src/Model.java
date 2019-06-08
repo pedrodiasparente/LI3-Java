@@ -483,5 +483,31 @@ public class Model implements InterfGereVendasModel{
 
         return ret;
     }
+
+    public ArrayList<FaturacaoMesFilial> query10(){
+        ArrayList<FaturacaoMesFilial> ret = new ArrayList<>();
+        int mes;
+        double fat;
+
+        for (mes = 0; mes < 12; mes++){
+            ret.add(new FaturacaoMesFilial());
+        }
+
+        for(Map.Entry<Integer, GestFilial> filial : this.gestFilial.entrySet()){
+            for(mes = 0; mes < 12; mes++){
+                ret.get(mes).getFatFilial().put(filial.getKey(), new HashMap<>());
+            }
+            for(TreeMap<String, InfoProd> treeProds :  filial.getValue().getClientes().values()){
+                for (Map.Entry<String, InfoProd> produto : treeProds.entrySet()){
+                    for (mes = 0; mes < 12; mes++) {
+                        fat = produto.getValue().getPrecoPMes(mes) + produto.getValue().getPrecoNMes(mes);
+                        ret.get(mes).addFatFilial(produto.getKey(), fat, filial.getKey());
+                    }
+                }
+            }
+        }
+
+        return ret;
+    }
 }
 

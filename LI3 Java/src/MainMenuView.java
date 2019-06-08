@@ -127,4 +127,23 @@ public class MainMenuView implements InterfGereVendasView{
             System.out.println("Cliente: " + s.getString() + " Faturacao: " + s.getFat() + " Quantidade: " + s.getQuantidade());
         }
     }
+
+    public void outQuery10(ArrayList<FaturacaoMesFilial> a){
+        int j = 1;
+        for(FaturacaoMesFilial f : a) {
+            System.out.println("---------Mês " + j + "---------");
+            System.out.println("----------------------Geral----------------------");
+            for(Map.Entry<String,Double> m : f.getFatTotal().entrySet()){
+                System.out.println("Produto " + m.getKey() + " Faturacao: " + m.getValue());
+            }
+
+            for(Map.Entry<Integer,HashMap<String,Double>> i : f.getFatFilial().entrySet()){
+                System.out.println("--------------------Filial " + i.getKey() + "--------------------:");
+                for(Map.Entry<String,Double> n : i.getValue().entrySet()){
+                    System.out.println("Produto " + n.getKey() + " Faturacao: " + n.getValue());
+                }
+            }
+            j++;
+        }
+    }
 }

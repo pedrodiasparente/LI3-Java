@@ -263,17 +263,21 @@ public class Model implements InterfGereVendasModel{
         return new AbstractMap.SimpleEntry<>(quantVendas,quantClientes);
     }
 
-    public TripleInt query3(String client){
+    public TripleInt query3(String client){ // Há um pequeno problema nesta query no número de vendas, se comprar duas vezes o mesmo produto no mesmo mês só vai contar com uma comprar, quando devia contar duas
+        //Isto é porque ele só percorre o array das quantidades e soma um por cada != 0, mas deveria era haver mais um array na gestFilial que dê o numero de vendas
         TripleInt res = new TripleInt();
         int[] triggers = new int[12];
         for (int i = 0; i < 3; i++) {
             for (Map.Entry<String, InfoProd> m : this.gestFilial.get(i).getClientes().get(client).entrySet()) {
                 Arrays.fill(triggers,1);
-                String prod = m.getKey();
-                //Isto dá mais vendas do que devia, not sure why
-                res.setInt1(res.addArraysInt(res.getInt1(),(this.getFatGlobal().getFaturacao(prod).getnVendasP()[i])));
-                res.setInt1(res.addArraysInt(res.getInt1(),(this.getFatGlobal().getFaturacao(prod).getnVendasN()[i])));
-                //
+                for (int k = 0; k < 12; k++){
+                    if (m.getValue().getQuantNMes(k) != 0) {
+                        res.addInt1Mes(k);
+                    }
+                    if (m.getValue().getQuantPMes(k) != 0) {
+                        res.addInt1Mes(k);
+                    }
+                }
                 res.setInt3(res.addArraysDouble(res.getInt3(),m.getValue().getPrecoP()));
                 res.setInt3(res.addArraysDouble(res.getInt3(),m.getValue().getPrecoN()));
                 for (int k = 0; k < 12; k++){

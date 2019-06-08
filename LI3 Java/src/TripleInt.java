@@ -44,6 +44,10 @@ public class TripleInt {
         System.arraycopy(int1, 0, this.int1, 0, 12);
     }
 
+    public void addInt1Mes(int mes) {
+        this.int1[mes]++;
+    }
+
     public void setInt2(int[] int2) {
         System.arraycopy(int2, 0, this.int2, 0, 12);
     }

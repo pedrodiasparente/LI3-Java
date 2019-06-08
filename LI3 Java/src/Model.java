@@ -107,7 +107,7 @@ public class Model implements InterfGereVendasModel{
 
     private boolean valVenda(String vendaString){
         boolean val;
-        String venda[];
+        String[] venda;
 
         venda = vendaString.split(" ");
 
@@ -377,6 +377,29 @@ public class Model implements InterfGereVendasModel{
 
         return l;
 
+    }
+
+    public ArrayList<String> query8(int x){
+        ArrayList<String> ret = new ArrayList<>();
+        HashMap<String,String> prodsComprados = new HashMap<>();
+        TreeMap<Integer, String> clientesPorProduto = new TreeMap<>(Collections.reverseOrder());
+
+        for(String cliente : this.clientes.getClientes()) {
+            for (GestFilial g : this.gestFilial.values()) {
+                for(String produto: g.getClientes().get(cliente).keySet()){
+                    prodsComprados.put(produto, produto);
+                }
+            }
+            clientesPorProduto.put(prodsComprados.size(), cliente);
+        }
+
+        for(String cliente : clientesPorProduto.values()){
+            if(x == 0) break;
+            ret.add(cliente);
+            x--;
+        }
+
+        return ret;
     }
 }
 

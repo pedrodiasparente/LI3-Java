@@ -62,6 +62,11 @@ public class MainMenuView implements InterfGereVendasView{
         return Input.lerInt();
     }
 
+    public int inQueryNumClientes(){
+        System.out.println("Insira o número de Clientes");
+        return Input.lerInt();
+    }
+
     public void outQuery2(AbstractMap.SimpleEntry<Integer,Integer> query2, String s){
         int query2Vendas = query2.getKey();
         int query2Clientes = query2.getValue();
@@ -97,6 +102,12 @@ public class MainMenuView implements InterfGereVendasView{
         System.out.println("Filial " + filial);
         for(AbstractMap.SimpleEntry<String, Double> s: l){
             System.out.println("Cliente " + s.getKey() + " Faturacao: " + s.getValue());
+        }
+    }
+
+    public void outQuery8(ArrayList<String> array){
+        for(String s : array){
+            System.out.println(s);
         }
     }
 }

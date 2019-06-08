@@ -324,11 +324,10 @@ public class Model implements InterfGereVendasModel{
         return res;
     }
 
-    public TreeSet<QuantidadeProduto> query5(String cliente){
-        TreeSet<QuantidadeProduto> ret = new TreeSet<>(new QuantidadeComparator());
-        TreeMap<String, QuantidadeProduto> prods = new TreeMap<>();
+    public TreeSet<QuantidadeString> query5(String cliente){
+        TreeSet<QuantidadeString> ret = new TreeSet<>(new QuantidadeComparator());
+        TreeMap<String, QuantidadeString> prods = new TreeMap<>();
         int quantTotal;
-
 
         for(GestFilial g : this.gestFilial.values()){
             for(Map.Entry<String, InfoProd> entry  : g.getClientes().get(cliente).entrySet()){
@@ -342,11 +341,11 @@ public class Model implements InterfGereVendasModel{
                 if(prods.containsKey(entry.getKey())){
                     prods.get(entry.getKey()).addQuantidade(quantTotal);
                 } else{
-                    prods.put(entry.getKey(), new QuantidadeProduto(entry.getKey(), quantTotal));
+                    prods.put(entry.getKey(), new QuantidadeString(entry.getKey(), quantTotal));
                 }
             }
         }
-        for (QuantidadeProduto qp : prods.values()){
+        for (QuantidadeString qp : prods.values()){
             ret.add(qp.clone());
         }
 
@@ -381,22 +380,71 @@ public class Model implements InterfGereVendasModel{
 
     public ArrayList<String> query8(int x){
         ArrayList<String> ret = new ArrayList<>();
-        HashMap<String,String> prodsComprados = new HashMap<>();
+        TreeMap<String, HashMap<String, String>> clientesProdutos = new TreeMap<>();
         TreeMap<Integer, String> clientesPorProduto = new TreeMap<>(Collections.reverseOrder());
+        int i, total = 0;
 
-        for(String cliente : this.clientes.getClientes()) {
-            for (GestFilial g : this.gestFilial.values()) {
-                for(String produto: g.getClientes().get(cliente).keySet()){
-                    prodsComprados.put(produto, produto);
-                }
-            }
-            clientesPorProduto.put(prodsComprados.size(), cliente);
+        for(String c : this.clientes.getClientes()){
+            clientesProdutos.put(c, new HashMap<>());
         }
 
+        for(GestFilial g: this.gestFilial.values()){
+            for(Map.Entry<String, TreeMap<String, InfoProd>> entry : g.getClientes().entrySet()){
+                for(String prod : entry.getValue().keySet()) {
+                    clientesProdutos.get(entry.getKey()).put(prod,prod);
+                }
+            }
+        }
+
+        for(Map.Entry<String, HashMap<String, String>> entry : clientesProdutos.entrySet()){
+            clientesPorProduto.put(entry.getValue().size(), entry.getKey());
+        }
+
+        i = x;
         for(String cliente : clientesPorProduto.values()){
-            if(x == 0) break;
+            if(i == 0) break;
             ret.add(cliente);
-            x--;
+            i = i-1;
+        }
+
+        return ret;
+    }
+
+    public TreeSet<ClientQuantFat> query9(String produto){
+        TreeSet<ClientQuantFat> ret = new TreeSet<>(new QuantidadeComparator());
+        TreeMap<String, ClientQuantFat> prods = new TreeMap<>();
+        int quantTotal;
+        double fatTotal;
+
+        for(GestFilial g : this.gestFilial.values()){
+            try {
+                for (Map.Entry<String, InfoProd> entry : g.getClientes().get(produto).entrySet()) {
+                    quantTotal = 0;
+                    fatTotal = 0;
+                    for (double i : entry.getValue().getQuantP()) {
+                        quantTotal += i;
+                    }
+                    for (double i : entry.getValue().getQuantP()) {
+                        quantTotal += i;
+                    }
+                    for (double i : entry.getValue().getPrecoP()) {
+                        fatTotal += i;
+                    }
+                    for (double i : entry.getValue().getPrecoN()) {
+                        fatTotal += i;
+                    }
+                    if (prods.containsKey(entry.getKey())) {
+                        prods.get(entry.getKey()).addQuantidade(quantTotal);
+                        prods.get(entry.getKey()).addFat(fatTotal);
+                    } else {
+                        prods.put(entry.getKey(), new ClientQuantFat(entry.getKey(), quantTotal, fatTotal));
+                    }
+                }
+            }
+            catch (NullPointerException e){;}
+        }
+        for (ClientQuantFat cqf : prods.values()){
+            ret.add(cqf);
         }
 
         return ret;

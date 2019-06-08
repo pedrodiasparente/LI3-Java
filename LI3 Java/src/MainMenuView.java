@@ -92,9 +92,9 @@ public class MainMenuView implements InterfGereVendasView{
         }
     }
 
-    public void outQuery5(TreeSet<QuantidadeProduto> t){
-        for (QuantidadeProduto q: t) {
-            System.out.println("Produto: " + q.getProduto() + " Quantidade: " + q.getQuantidade());
+    public void outQuery5(TreeSet<QuantidadeString> t){
+        for (QuantidadeString q: t) {
+            System.out.println("Produto: " + q.getString() + " Quantidade: " + q.getQuantidade());
         }
     }
 
@@ -108,6 +108,12 @@ public class MainMenuView implements InterfGereVendasView{
     public void outQuery8(ArrayList<String> array){
         for(String s : array){
             System.out.println(s);
+        }
+    }
+
+    public void outQuery9(TreeSet<ClientQuantFat> t){
+        for(ClientQuantFat s : t){
+            System.out.println("Cliente: " + s.getString() + " Faturação: " + s.getFat());
         }
     }
 }

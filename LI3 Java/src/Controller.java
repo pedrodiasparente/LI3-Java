@@ -78,6 +78,11 @@ public class Controller implements InterfGereVendasControlador{
                     System.out.println(Crono.print());
                     break;
                 case 9:
+                    prod = this.view.inQueryProduto();
+                    Crono.start();
+                    this.view.outQuery9(this.model.query9(prod));
+                    Crono.stop();
+                    System.out.println(Crono.print());
                     break;
                 case 10:
                     break;

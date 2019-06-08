@@ -98,39 +98,20 @@ public class Controller implements InterfGereVendasControlador{
                     break;
                 case 11:
                     Crono.start();
-                    System.out.println("heyo");
+                    this.view.outLoadData(this.model.loadData(), this.model.getClientes().size(), this.model.getProdutos().size());
                     Crono.stop();
                     System.out.println(Crono.print());
+                    break;
+                case 12:
+                    String fichSave = this.view.lerNomeFich();
+                    this.model.saveModel(fichSave);
+                    break;
+                case 13:
+                    String fichLoad = this.view.lerNomeFich();
+                    this.model.loadModel(fichLoad);
                     break;
             }
         } while (view.getOP()!=0);
         System.out.println("See ya next time, partner...");
-    }
-
-    public void saveController(String fich){
-        try{
-            ObjectOutputStream oout = new ObjectOutputStream(new FileOutputStream(fich));
-            oout.writeObject(this);
-            oout.flush();
-            oout.close();
-        } catch(IOException e) {
-            System.out.println(e.getMessage());
-        }
-    }
-
-    public Controller readEstado(String fich){
-        Controller s = new Controller();
-        try {
-            ObjectInputStream oin = new ObjectInputStream(new FileInputStream(fich));
-            s = (Controller) oin.readObject();
-            oin.close();
-        } catch(FileNotFoundException e) {
-            System.out.println(e.getMessage());
-        } catch(IOException e){
-            System.out.println(e.getMessage());
-        } catch(ClassNotFoundException e){
-            System.out.println(e.getMessage());
-        }
-        return s;
     }
 }

@@ -1,7 +1,7 @@
 import java.io.*;
 import java.util.*;
 
-public class Model implements InterfGereVendasModel{
+public class Model implements Serializable, InterfGereVendasModel{
     private Cat_Produtos produtos;
     private Cat_Clientes clientes;
     private Map<Integer, GestFilial> gestFilial;
@@ -130,10 +130,12 @@ public class Model implements InterfGereVendasModel{
         return val;
     }
 
-    private void loadVendas(String fich){
+    private ReadingData loadVendas(String fich){
         String vendaString;
         String[] venda;
         int filial;
+        ReadingData readData = new ReadingData();
+        readData.setFileName(fich);
         try{
 
             BufferedReader br = new BufferedReader(new FileReader(fich));
@@ -145,17 +147,26 @@ public class Model implements InterfGereVendasModel{
                     if(!this.gestFilial.containsKey(filial))
                         this.gestFilial.put(filial, new GestFilial());
                     this.gestFilial.get(filial).addVenda(vendaString);
+                    readData.incNumVendas();
+                    if(Double.parseDouble(venda[1]) == 0) readData.incNumVendasZero();
+                    else readData.addFatTotal(Double.parseDouble(venda[1]));
+                    readData.addClienteComCompra(venda[4]);
+                    readData.addProdutoComprado(venda[0]);
+                } else{
+                    readData.incNumVendasFalhadas();
                 }
             }
             br.close();
         } catch(IOException e) {
             System.out.println(e.getMessage());
         }
+        return readData;
     }
 
-    public void loadData(){
+    public ReadingData loadData(){
         String fileClientes, fileProdutos, fileVendas;
         int numFilial;
+        ReadingData readData = new ReadingData();
 
         try{
             BufferedReader br = new BufferedReader(new FileReader("loadConfig.txt"));
@@ -165,20 +176,44 @@ public class Model implements InterfGereVendasModel{
             numFilial = Integer.parseInt(br.readLine());
             br.close();
             for(int i = 0; i < numFilial; i++)
-                    this.gestFilial.put(i, new GestFilial());
+                this.gestFilial.put(i, new GestFilial());
             this.loadClientes(fileClientes);
             this.loadProdutos(fileProdutos);
-            this.loadVendas(fileVendas);
-
-            System.out.println(this.fatGlobal.getFatGlobal().size());
-            System.out.println(this.produtos.getProdutos().size());
-            System.out.println(this.clientes.getClientes().size());
-            System.out.println(this.gestFilial.get(1).getClientes().size());
-
+            readData = this.loadVendas(fileVendas);
 
         } catch(IOException e) {
             System.out.println(e.getMessage());
         }
+        return readData;
+    }
+
+    public void saveModel(String fich){
+        if (fich.equals("")) fich = "gestVendas.dat";
+        try{
+            ObjectOutputStream oout = new ObjectOutputStream(new FileOutputStream(fich));
+            oout.writeObject(this);
+            oout.flush();
+            oout.close();
+        } catch(IOException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    public Model loadModel(String fich){
+        Model s = new Model();
+        if (fich.equals("")) fich = "gestVendas.dat";
+        try {
+            ObjectInputStream oin = new ObjectInputStream(new FileInputStream(fich));
+            s = (Model) oin.readObject();
+            oin.close();
+        } catch(FileNotFoundException e) {
+            System.out.println(e.getMessage());
+        } catch(IOException e){
+            System.out.println(e.getMessage());
+        } catch(ClassNotFoundException e){
+            System.out.println(e.getMessage());
+        }
+        return s;
     }
 
     public Cat_Produtos query1() {

@@ -6,7 +6,7 @@ public class MainMenuView implements InterfGereVendasView{
     private List<String> opcoes;
 
     public MainMenuView(){
-        String[] options = {"query1","query2", "query3", "query4", "query5", "query6", "query7", "query8", "query9", "query10", "Ler dos Logs"};
+        String[] options = {"query1","query2", "query3", "query4", "query5", "query6", "query7", "query8", "query9", "query10", "Ler dos Logs", "Save Model", "Load Model"};
         this.opcoes = Arrays.asList(options);
         this.op = 0;
     }
@@ -55,6 +55,11 @@ public class MainMenuView implements InterfGereVendasView{
             System.out.println(s);
         }
         System.out.println(p.getProdutos().size());
+    }
+
+    public String lerNomeFich(){
+        System.out.println("Insira nome do ficheiro");
+        return Input.lerString();
     }
 
     public int inQueryMes(){
@@ -135,5 +140,24 @@ public class MainMenuView implements InterfGereVendasView{
             System.out.println("Mês " + j + " || "+  f.getFatTotal() + " || " + f.getFatFilial().get(0) + " || " + f.getFatFilial().get(1) + " || " + f.getFatFilial().get(2));
             j++;
         }
+    }
+
+    public void outLoadData(ReadingData data, int totalClientes, int totalProds){
+        int prodComprados, prodNComprados, ClientCompr, ClientNCompr;
+        prodComprados = data.getProdutosComprados().size();
+        prodNComprados = totalProds - prodComprados;
+        ClientCompr = data.getClientesComCompra().size();
+        ClientNCompr = totalClientes - ClientCompr;
+        System.out.println("Nome do Ficheiro: " + data.getFileName());
+        System.out.println("Total de Vendas: " + data.getNumVendas());
+        System.out.println("Vendas falhadas: " + data.getNumVendasFalhadas());
+        System.out.println("Total de produtos: " + totalProds);
+        System.out.println("Total de produtos comprados: " + prodComprados);
+        System.out.println("Total de produtos não comprados: " + prodNComprados);
+        System.out.println("Total de clientes: " + totalClientes);
+        System.out.println("Total de clientes que compraram: " + ClientCompr);
+        System.out.println("Total de clientes que não compraram: " + ClientNCompr);
+        System.out.println("Vendas gratuitas: " + data.getNumVendasZero());
+        System.out.println("Faturacao Total: " + data.getFatTotal());
     }
 }

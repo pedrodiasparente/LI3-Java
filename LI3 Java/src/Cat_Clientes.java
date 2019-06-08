@@ -39,6 +39,10 @@ public class Cat_Clientes implements Serializable {
         return this.clientes.contains(client);
     }
 
+    public int size() {
+        return this.clientes.size();
+    }
+
     public Cat_Clientes clone() {
         return new Cat_Clientes(this);
     }

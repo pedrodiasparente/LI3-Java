@@ -39,6 +39,10 @@ public class Cat_Produtos implements Serializable {
         return this.produtos.contains(prod);
     }
 
+    public int size() {
+        return this.produtos.size();
+    }
+
     public Cat_Produtos clone() {
         return new Cat_Produtos(this);
     }

@@ -10,25 +10,33 @@ public class InfoProd implements Serializable {
     private int[] quantN;
     private double[] precoP;
     private double[] precoN;
+    private int[] nVendasP;
+    private int[] nVendasN;
 
     public InfoProd () {
         this.quantP = new int[12];
         this.quantN = new int[12];
         this.precoP = new double[12];
         this.precoN = new double[12];
+        this.nVendasP = new int[12];
+        this.nVendasN = new int[12];
     }
 
-    public InfoProd (int[] quantP, int[] quantN, double[] precoP, double[] precoN) {
+    public InfoProd (int[] quantP, int[] quantN, double[] precoP, double[] precoN, int[] nVendasP, int[] nVendasN) {
         this.quantP = quantP;
         this.quantN = quantN;
         this.precoP = precoP;
         this.precoN = precoN;
+        this.nVendasP = nVendasP;
+        this.nVendasN = nVendasN;
     }
      public InfoProd (InfoProd o) {
         this.quantP = o.getQuantP();
         this.quantN = o.getQuantN();
         this.precoP = o.getPrecoP();
         this.precoN = o.getPrecoN();
+        this.nVendasP = o.getNVendasP();
+        this.nVendasN = o.getNVendasN();
      }
 
      public int[] getQuantP() {
@@ -77,6 +85,30 @@ public class InfoProd implements Serializable {
         return this.precoN[i];
     }
 
+    public int[] getNVendasP() {
+        int[] r = new int[12];
+        for (int i = 0; i < 12; i++){
+            r[i] = this.nVendasP[i];
+        }
+        return r;
+    }
+
+    public int getNVendasPMes(int i) {
+        return this.nVendasP[i];
+    }
+
+    public int[] getNVendasN() {
+        int[] r = new int[12];
+        for (int i = 0; i < 12; i++){
+            r[i] = this.nVendasN[i];
+        }
+        return r;
+    }
+
+    public int getNVendasNMes(int i) {
+        return this.nVendasN[i];
+    }
+
     public void setQuantP(int[] q) {
         for (int i = 0; i < 12; i++){
             this.quantP[i] = q[i];
@@ -101,21 +133,18 @@ public class InfoProd implements Serializable {
         }
     }
 
-/*
-    private void somaProdInfo(InfoProd produtoData, InfoProd newProduto){
-        int i;
-
-        for(i = 0; i < 12; i++)
-            produtoData.setQuantN();
-            setQuant(produtoData, i, getQuantN(newProduto, i, 'N'), 'N');
-        for(i = 0; i < 12; i++)
-            setQuant(produtoData, i, getQuantP(newProduto, i, 'P'), 'P');
-        for(i = 0; i < 12; i++)
-            setPrecoGF(produtoData, i, getPrecoGF(newProduto, i, 'N'), 'N');
-        for(i = 0; i < 12; i++)
-            setPrecoGF(produtoData, i, getPrecoGF(newProduto, i, 'P'), 'P');
+    public void setnVendasP(int[] q) {
+        for (int i = 0; i < 12; i++){
+            this.nVendasP[i] = q[i];
+        }
     }
-*/
+
+    public void setnVendasN(int[] q) {
+        for (int i = 0; i < 12; i++){
+            this.nVendasP[i] = q[i];
+        }
+    }
+
     public InfoProd clone() {
         return new InfoProd(this);
     }
@@ -130,10 +159,12 @@ public class InfoProd implements Serializable {
         if(venda[3].equals("N")){
             this.precoN[mes] += Double.parseDouble(venda[1]) * Integer.parseInt(venda[2]);
             this.quantN[mes] = Integer.parseInt(venda[2]);
+            this.nVendasN[mes]++;
         }
         else {
             this.precoP[mes] += Double.parseDouble(venda[1]) * Integer.parseInt(venda[2]);
             this.quantP[mes] =  Integer.parseInt(venda[2]);
+            this.nVendasP[mes]++;
         }
     }
 }

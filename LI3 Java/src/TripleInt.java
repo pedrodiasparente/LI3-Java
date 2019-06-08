@@ -75,4 +75,22 @@ public class TripleInt {
         }
         return res;
     }
+
+    public int[] addArraysMatInt(int array1[], int mat1[][], int mat2[][]){
+        for (int j = 0; j < 3; j++) {
+            for (int i = 0; i < 12; i++) {
+                array1[i] += mat1[j][i] + mat2[j][i];
+            }
+        }
+        return array1;
+    }
+
+    public double[] addArraysMatInt(double array1[], double mat1[][], double mat2[][]){
+        for (int j = 0; j < 3; j++) {
+            for (int i = 0; i < 12; i++) {
+                array1[i] += mat1[j][i] + mat2[j][i];
+            }
+        }
+        return array1;
+    }
 }

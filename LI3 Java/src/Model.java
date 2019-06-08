@@ -295,5 +295,34 @@ public class Model implements InterfGereVendasModel{
 
         return res;
     }
+
+    public TripleInt query4(String produto) {
+        TripleInt res = new TripleInt();
+        Faturacao f = this.fatGlobal.getFatGlobal().get(produto).clone();
+
+        res.setInt1(res.addArraysMatInt(res.getInt1(), f.getnVendasP(), f.getnVendasN()));
+
+        res.setInt3(res.addArraysMatInt(res.getInt3(), f.getPrecoTotalP(), f.getPrecoTotalN()));
+        for(int k = 0; k < 3;k++) {
+            for (Map.Entry<String, TreeMap<String, InfoProd>> m : this.gestFilial.get(k).getClientes().entrySet()) {
+                for (int i = 0; i < 12; i++) {
+                    try {
+                        if (m.getValue().get(produto).getQuantN()[i] != 0) {
+                            res.addInt2Mes(i);
+                        }
+
+                        if (m.getValue().get(produto).getQuantP()[i] != 0) {
+                            res.addInt2Mes(i);
+                        }
+                    }
+                    catch (NullPointerException e) {
+                    }
+                }
+            }
+        }
+
+        return res;
+    }
+
 }
 

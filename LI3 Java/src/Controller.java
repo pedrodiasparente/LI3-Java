@@ -28,55 +28,22 @@ public class Controller implements InterfGereVendasControlador{
                     System.out.println("heyo");
                     break;
                 case 2:
-                    //nuno nao sei como é para fazer sobre onde imprimir as coisas
-                    Cat_Produtos p = new Cat_Produtos(this.model.query1());
-                    Iterator<String> it = p.getProdutos().iterator();
-
-                    while (it.hasNext()) {
-                        System.out.println(it.next());
-                    }
-                    System.out.println(p.getProdutos().size());
+                    this.view.outQuery1(this.model.query1());
                     break;
                 case 3:
-                    System.out.println("Insira mês");
-                    Scanner isInt2 = new Scanner(System.in);
-                    int mes = isInt2.nextInt();
-                    int query2Vendas1 = this.model.query2Filial(mes,1).getKey();
-                    int query2Clientes1 = this.model.query2Filial(mes,1).getValue();
-                    int query2Vendas2 = this.model.query2Filial(mes,2).getKey();
-                    int query2Clientes2 = this.model.query2Filial(mes,2).getValue();
-                    int query2Vendas3 = this.model.query2Filial(mes,3).getKey();
-                    int query2Clientes3 = this.model.query2Filial(mes,3).getValue();
-                    int query2TotalVendas = this.model.query2Total(mes).getKey();
-                    int query2TotalClientes = this.model.query2Total(mes).getValue();
-                    System.out.println("Geral: " + query2TotalVendas + " " + query2TotalClientes);
-                    System.out.println("Filial 1: " + query2Vendas1 + " " + query2Clientes1);
-                    System.out.println("Filial 2: " + query2Vendas2 + " " + query2Clientes2);
-                    System.out.println("Filial 3: " + query2Vendas3 + " " + query2Clientes3);
+                    int mes = this.view.inQuery2();
+                    this.view.outQuery2(this.model.query2Total(mes), "Geral: ");
+                    this.view.outQuery2(this.model.query2Filial(mes,1), "Filial 1: ");
+                    this.view.outQuery2(this.model.query2Filial(mes,2), "Filial 2: ");
+                    this.view.outQuery2(this.model.query2Filial(mes,3), "Filial 3: ");
                     break;
                 case 4:
-                    System.out.println("Insira Cliente");
-                    Scanner isString3 = new Scanner(System.in);
-                    String client = isString3.next();
-                    TripleInt query3 = model.query3(client);
-                    for(int i = 1; i < 13; i++){
-                        System.out.println(query3.getInt1()[i-1]);
-                        System.out.println(query3.getInt2()[i-1]);
-                        System.out.println(query3.getInt3()[i-1]);
-                        System.out.println("-------- Fim mês " + i + " ----------");
-                    }
+                    String cliente = this.view.inQuery3();
+                    this.view.outQuery3or4(this.model.query3(cliente));
                     break;
                 case 5:
-                    System.out.println("Insira produto");
-                    Scanner isString4 = new Scanner(System.in);
-                    String produto = isString4.next();
-                    TripleInt query4 = model.query4(produto);
-                    for(int i = 1; i < 13; i++){
-                        System.out.println(query4.getInt1()[i-1]);
-                        System.out.println(query4.getInt2()[i-1]);
-                        System.out.println(query4.getInt3()[i-1]);
-                        System.out.println("-------- Fim mês " + i + " ----------");
-                    }
+                    String prod = this.view.inQuery4();
+                    this.view.outQuery3or4(this.model.query4(prod));
                     break;
             }
         } while (view.getOP()!=0);

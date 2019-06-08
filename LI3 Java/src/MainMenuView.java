@@ -49,4 +49,41 @@ public class MainMenuView implements InterfGereVendasView{
     public int getOP() {
         return this.op;
     }
+
+    public void outQuery1(Cat_Produtos p){
+        for (String s : p.getProdutos()) {
+            System.out.println(s);
+        }
+        System.out.println(p.getProdutos().size());
+    }
+
+    public int inQuery2(){
+        System.out.println("Insira mês");
+        return Input.lerInt();
+    }
+
+    public void outQuery2(AbstractMap.SimpleEntry<Integer,Integer> query2, String s){
+        int query2Vendas = query2.getKey();
+        int query2Clientes = query2.getValue();
+        System.out.println(s + query2Vendas + " " + query2Clientes);
+    }
+
+    public String inQuery3(){
+        System.out.println("Insira Cliente");
+        return Input.lerString();
+    }
+
+    public String inQuery4(){
+        System.out.println("Insira Produto");
+        return Input.lerString();
+    }
+
+    public void outQuery3or4(TripleInt query4){
+        for(int i = 1; i < 13; i++){
+            System.out.println(query4.getInt1()[i-1]);
+            System.out.println(query4.getInt2()[i-1]);
+            System.out.println(query4.getInt3()[i-1]);
+            System.out.println("-------- Fim mês " + i + " ----------");
+        }
+    }
 }

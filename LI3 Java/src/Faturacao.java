@@ -6,6 +6,8 @@ public class Faturacao implements Serializable {
     private int[][] nVendasN = new int[3][12];
     private double[][] precoTotalP = new double[3][12];
     private double[][] precoTotalN = new double[3][12];
+    private int[][] quantP = new int[3][12];
+    private int[][] quantN = new int[3][12];
 
     public Faturacao () {
         for (int i = 0; i < nVendasP.length; i++) {
@@ -28,13 +30,25 @@ public class Faturacao implements Serializable {
                 precoTotalN[i][j] = 0;
             }
         }
+        for (int i = 0; i < quantP.length; i++) {
+            for (int j = 0; j < quantP[i].length; j++) {
+                quantP[i][j] = 0;
+            }
+        }
+        for (int i = 0; i < quantN.length; i++) {
+            for (int j = 0; j < quantN[i].length; j++) {
+                quantN[i][j] = 0;
+            }
+        }
     }
 
-    public Faturacao(int[][] nvendasP, int[][] nVendasN, double[][] precoTotalP, double[][] precoTotalN) {
+    public Faturacao(int[][] nvendasP, int[][] nVendasN, double[][] precoTotalP, double[][] precoTotalN, int[][] quantP, int[][] quantN) {
         this.nVendasP = nvendasP;
         this.nVendasN = nVendasN;
         this.precoTotalP = precoTotalP;
         this.precoTotalN = precoTotalN;
+        this.quantP = quantP;
+        this.quantN = quantN;
     }
 
     public Faturacao (Faturacao obj) {
@@ -42,6 +56,8 @@ public class Faturacao implements Serializable {
         this.nVendasN = obj.getnVendasN();
         this.precoTotalP = obj.getPrecoTotalP();
         this.precoTotalN= obj.getPrecoTotalN();
+        this.quantP = obj.getQuantP();
+        this.quantN = obj.getQuantN();
     }
 
     public int[][] getnVendasP() {
@@ -84,6 +100,26 @@ public class Faturacao implements Serializable {
         return res;
     }
 
+    public int[][] getQuantP() {
+        int[][] res = new int[3][12];
+        for (int i = 0; i < quantP.length; i++) {
+            for (int j = 0; j < quantP[i].length; j++) {
+                res[i][j] = this.quantP[i][j];
+            }
+        }
+        return res;
+    }
+
+    public int[][] getQuantN() {
+        int[][] res = new int[3][12];
+        for (int i = 0; i < quantN.length; i++) {
+            for (int j = 0; j < quantN[i].length; j++) {
+                res[i][j] = this.quantN[i][j];
+            }
+        }
+        return res;
+    }
+
     public void setnVendasP(int[][] nVendasP) {
         for (int i = 0; i < nVendasP.length; i++) {
             for (int j = 0; j < nVendasP[i].length; j++) {
@@ -112,6 +148,22 @@ public class Faturacao implements Serializable {
         for (int i = 0; i < precoTotalN.length; i++) {
             for (int j = 0; j < precoTotalN[i].length; j++) {
                 this.precoTotalN[i][j] = precoTotalN[i][j];
+            }
+        }
+    }
+
+    public void setQuantP(int[][] quantP) {
+        for (int i = 0; i < quantP.length; i++) {
+            for (int j = 0; j < quantP[i].length; j++) {
+                this.quantP[i][j] = quantP[i][j];
+            }
+        }
+    }
+
+    public void setQuantN(int[][] quantN) {
+        for (int i = 0; i < quantN.length; i++) {
+            for (int j = 0; j < quantN[i].length; j++) {
+                this.quantN[i][j] = quantN[i][j];
             }
         }
     }
@@ -150,6 +202,20 @@ public class Faturacao implements Serializable {
                 aux += "[" + i + "][" + j + "] = " + precoTotalN[i][j] + "\n";
             }
         }
+
+        aux += "precoTotalN\n";
+        for (int i = 0; i < quantP.length; i++) {
+            for (int j = 0; j < quantP[i].length; j++) {
+                aux += "[" + i + "][" + j + "] = " + quantP[i][j] + "\n";
+            }
+        }
+
+        aux += "precoTotalN\n";
+        for (int i = 0; i < quantN.length; i++) {
+            for (int j = 0; j < quantN[i].length; j++) {
+                aux += "[" + i + "][" + j + "] = " + quantN[i][j] + "\n";
+            }
+        }
         return aux;
     }
 
@@ -164,10 +230,12 @@ public class Faturacao implements Serializable {
         if(venda[3].equals("N")){
             this.precoTotalN[filial][mes] += Double.parseDouble(venda[1]) * Integer.parseInt(venda[2]);
             this.nVendasN[filial][mes]++;
+            this.quantN[filial][mes] += Integer.parseInt(venda[2]);
         }
         if(venda[3].equals("P")){
             this.precoTotalP[filial][mes] += Double.parseDouble(venda[1]) * Integer.parseInt(venda[2]);
             this.nVendasP[filial][mes]++;
+            this.quantP[filial][mes] += Integer.parseInt(venda[2]);
         }
     }
 }

@@ -103,11 +103,10 @@ public class MainMenuView implements InterfGereVendasView{
         }
     }
 
-    public void outQuery6(AbstractMap.SimpleEntry<Cat_Produtos, Integer> query6){
-        for(String s : query6.getKey().getProdutos()){
-            System.out.println(s);
+    public void outQuery6(ArrayList<AbstractMap.SimpleEntry<String, Integer>> query6){
+        for(AbstractMap.SimpleEntry<String, Integer> s : query6){
+            System.out.println("Produto: " + s.getKey() + " Numero de Clientes distintos: " + s.getValue());
         }
-        System.out.println("Número de Clientes distintos: " + query6.getValue());
     }
 
     public void outQuery7(List<AbstractMap.SimpleEntry<String, Double>> l, int filial){

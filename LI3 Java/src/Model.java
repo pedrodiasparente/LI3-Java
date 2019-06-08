@@ -351,41 +351,40 @@ public class Model implements InterfGereVendasModel{
 
         return ret;
     }
-//query6 toda jabardice
-    public AbstractMap.SimpleEntry<Cat_Produtos,Integer> query6(int x) {
-        Map<Integer, String> lista = new TreeMap<>(Collections.reverseOrder());
-        Cat_Produtos cat = new Cat_Produtos();
-        int fat = 0;
+
+    public ArrayList<AbstractMap.SimpleEntry<String,Integer>> query6(int x) {
+        Set<QuantidadeString> lista = new TreeSet<>(new QuantidadeComparator());
+        ArrayList<AbstractMap.SimpleEntry<String,Integer>> ret = new ArrayList<>();
+        int quant;
         for (Map.Entry<String, Faturacao> e : this.fatGlobal.getFatGlobal().entrySet()) {
+            quant = 0;
             for (int i = 0; i < 3; i++) {
                 for (int j = 0; j < 12; j++) {
-                    fat += e.getValue().getnVendasN()[i][j] + e.getValue().getnVendasP()[i][j];
+                    quant += e.getValue().getQuantP()[i][j] + e.getValue().getQuantN()[i][j];
                 }
             }
-            lista.put(fat, e.getKey());
-            fat = 0;
+            lista.add(new QuantidadeString(e.getKey(),quant));
         }
+
+        int totClientes;
         int k = 0;
-
-        for (String s : lista.values()) {
-            if (k == x) break;
-            else {
-                cat.add(s);
-                k++;
-            }
-        }
-        int totClientes = 0;
-
-        for(int i = 0; i < 3; i++){
-            for(String s : cat.getProdutos()){
+        for(QuantidadeString n : lista){
+            totClientes = 0;
+            for(int i = 0; i < 3; i++){
                 for (Map.Entry<String, TreeMap<String, InfoProd>> m : this.gestFilial.get(i).getClientes().entrySet()) {
-                    if(m.getValue().containsKey(s)){
+                    if(m.getValue().containsKey(n.getString())){
                         totClientes++;
                     }
                 }
             }
+            if (k == x) break;
+            else {
+                ret.add(new AbstractMap.SimpleEntry<>(n.getString(),totClientes));
+                k++;
+            }
         }
-        return new AbstractMap.SimpleEntry<>(cat,totClientes);
+
+        return ret;
     }
 
     public List<AbstractMap.SimpleEntry<String, Double>> query7(int filial) {

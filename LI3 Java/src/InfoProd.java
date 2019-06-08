@@ -32,13 +32,21 @@ public class InfoProd implements Serializable {
      }
 
      public int[] getQuantP() {
-        return quantP;
+        int[] r = new int[12];
+        for (int i = 0; i < 12; i++){
+            r[i] = this.quantP[i];
+        }
+        return r;
      }
 
      public int getQuantPMes(int i) { return this.quantP[i]; }
 
      public int[] getQuantN() {
-        return quantN;
+         int[] r = new int[12];
+         for (int i = 0; i < 12; i++){
+             r[i] = this.quantN[i];
+         }
+         return r;
      }
 
     public int getQuantNMes(int i) {
@@ -46,7 +54,11 @@ public class InfoProd implements Serializable {
     }
 
     public double[] getPrecoP() {
-        return precoP;
+        double[] r = new double[12];
+        for (int i = 0; i < 12; i++){
+            r[i] = this.precoP[i];
+        }
+        return r;
     }
 
     public double getPrecoPMes(int i) {
@@ -54,7 +66,11 @@ public class InfoProd implements Serializable {
     }
 
     public double[] getPrecoN() {
-        return precoN;
+        double[] r = new double[12];
+        for (int i = 0; i < 12; i++){
+            r[i] = this.precoN[i];
+        }
+        return r;
     }
 
     public double getPrecoNMes(int i) {
@@ -62,19 +78,27 @@ public class InfoProd implements Serializable {
     }
 
     public void setQuantP(int[] q) {
-        this.quantP = q;
+        for (int i = 0; i < 12; i++){
+            this.quantP[i] = q[i];
+        }
     }
 
     public void setQuantN(int[] q) {
-        this.quantN = q;
+        for (int i = 0; i < 12; i++){
+            this.quantN[i] = q[i];
+        }
     }
 
     public void setPrecoP(double[] q) {
-        this.precoP = q;
+        for (int i = 0; i < 12; i++){
+            this.precoP[i] = q[i];
+        }
     }
 
     public void setPrecoN(double[] q) {
-        this.precoN = q;
+        for (int i = 0; i < 12; i++){
+            this.precoN[i] = q[i];
+        }
     }
 
 /*

@@ -1,9 +1,5 @@
 import java.io.*;
-import java.util.AbstractMap;
-import java.util.HashMap;
-import java.util.TreeMap;
-import java.util.Map;
-import java.util.TreeSet;
+import java.util.*;
 
 public class Model implements InterfGereVendasModel{
     private Cat_Produtos produtos;
@@ -191,7 +187,6 @@ public class Model implements InterfGereVendasModel{
         TreeSet<String> t = new TreeSet<>();
         for(Map.Entry<String,Faturacao> m : this.fatGlobal.getFatGlobal().entrySet()) {
             val = 0;
-            //nuno isto devia funcionar mas nao está
             for (int i = 0; i < 3; i++) {
                 for (int j = 0; j < 12; j++) {
                     if (m.getValue().getnVendasP()[i][j] != 0) val = 1;
@@ -200,9 +195,7 @@ public class Model implements InterfGereVendasModel{
             }
             if (val == 0) {
                 t.add(m.getKey());
-
             }
-            else ;//System.out.println(m.getKey());
         }
         p.setProdutos(t);
         return p;
@@ -218,12 +211,12 @@ public class Model implements InterfGereVendasModel{
         }
         for(Map.Entry<String,TreeMap<String,InfoProd>> m : this.gestFilial.get(filial-1).getClientes().entrySet()){
             for(Map.Entry<String,InfoProd> t : m.getValue().entrySet()) {
-                if(t.getValue().getQuantPMes(mes) != 0 && trigger == 0) {
+                if(t.getValue().getQuantPMes(mes-1) != 0 && trigger == 0) {
                     quantClientes ++;
                     trigger = 1;
                     break;
                 }
-                if(t.getValue().getQuantNMes(mes) != 0 && trigger == 0) {
+                if(t.getValue().getQuantNMes(mes-1) != 0 && trigger == 0) {
                     quantClientes ++;
                     trigger = 1;
                     break;
@@ -240,7 +233,7 @@ public class Model implements InterfGereVendasModel{
         int quantVendas = 0;
         int quantClientes;
         Cat_Clientes c = new Cat_Clientes();
-        int trigger = 0;
+        int trigger;
         for(Map.Entry<String,Faturacao> m : this.fatGlobal.getFatGlobal().entrySet()){
             for(int i = 0; i < 3; i++) {
                 quantVendas += m.getValue().getnVendasP()[i][mes - 1];
@@ -249,25 +242,54 @@ public class Model implements InterfGereVendasModel{
         }
         for (int i = 0; i < 3; i++) {
             for (Map.Entry<String, TreeMap<String, InfoProd>> m : this.gestFilial.get(i).getClientes().entrySet()) {
+                trigger = 1;
                 String key = m.getKey();
                 for (Map.Entry<String, InfoProd> t : m.getValue().entrySet()) {
-                    if (t.getValue().getQuantPMes(mes) != 0 && trigger == 0) {
+                    if (t.getValue().getQuantPMes(mes-1) != 0 && trigger == 1) {
                         c.add(key);
-                        trigger = 1;
+                        trigger = 0;
                         break;
                     }
-                    if (t.getValue().getQuantNMes(mes) != 0 && trigger == 0) {
+                    if (t.getValue().getQuantNMes(mes-1) != 0 && trigger == 1) {
                         c.add(key);
-                        trigger = 1;
+                        trigger = 0;
                         break;
                     }
-                    if (trigger == 1) break;
+                    if (trigger == 0) break;
                 }
-                trigger = 0;
             }
         }
         quantClientes = c.getClientes().size();
         return new AbstractMap.SimpleEntry<>(quantVendas,quantClientes);
+    }
+
+    public TripleInt query3(String client){
+        TripleInt res = new TripleInt();
+        int[] triggers = new int[12];
+        for (int i = 0; i < 3; i++) {
+            for (Map.Entry<String, InfoProd> m : this.gestFilial.get(i).getClientes().get(client).entrySet()) {
+                Arrays.fill(triggers,1);
+                String prod = m.getKey();
+                //Isto dá mais vendas do que devia, not sure why
+                res.setInt1(res.addArraysInt(res.getInt1(),(this.getFatGlobal().getFaturacao(prod).getnVendasP()[i])));
+                res.setInt1(res.addArraysInt(res.getInt1(),(this.getFatGlobal().getFaturacao(prod).getnVendasN()[i])));
+                //
+                res.setInt3(res.addArraysDouble(res.getInt3(),m.getValue().getPrecoP()));
+                res.setInt3(res.addArraysDouble(res.getInt3(),m.getValue().getPrecoN()));
+                for (int k = 0; k < 12; k++){
+                    if (m.getValue().getQuantNMes(k) != 0 && triggers[k] == 1) {
+                        res.addInt2Mes(k);
+                        triggers[k] = 0;
+                    }
+                    if (m.getValue().getQuantPMes(k) != 0 && triggers[k] == 1) {
+                        res.addInt2Mes(k);
+                        triggers[k] = 0;
+                    }
+                }
+            }
+        }
+
+        return res;
     }
 }
 

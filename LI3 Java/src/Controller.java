@@ -39,8 +39,8 @@ public class Controller implements InterfGereVendasControlador{
                     break;
                 case 3:
                     System.out.println("Insira mês");
-                    Scanner is = new Scanner(System.in);
-                    int mes = is.nextInt();
+                    Scanner isInt = new Scanner(System.in);
+                    int mes = isInt.nextInt();
                     int query2Vendas1 = this.model.query2Filial(mes,1).getKey();
                     int query2Clientes1 = this.model.query2Filial(mes,1).getValue();
                     int query2Vendas2 = this.model.query2Filial(mes,2).getKey();
@@ -53,6 +53,19 @@ public class Controller implements InterfGereVendasControlador{
                     System.out.println("Filial 1: " + query2Vendas1 + " " + query2Clientes1);
                     System.out.println("Filial 2: " + query2Vendas2 + " " + query2Clientes2);
                     System.out.println("Filial 3: " + query2Vendas3 + " " + query2Clientes3);
+                    break;
+                case 4:
+                    System.out.println("Insira Cliente");
+                    Scanner isString = new Scanner(System.in);
+                    String client = isString.next();
+                    TripleInt query3 = model.query3(client);
+                    for(int i = 1; i < 13; i++){
+                        System.out.println(query3.getInt1()[i-1]);
+                        System.out.println(query3.getInt2()[i-1]);
+                        System.out.println(query3.getInt3()[i-1]);
+                        System.out.println("-------- Fim mês " + i + " ----------");
+                    }
+                    break;
             }
         } while (view.getOP()!=0);
         System.out.println("See ya next time, partner...");

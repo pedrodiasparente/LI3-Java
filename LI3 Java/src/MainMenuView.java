@@ -67,6 +67,11 @@ public class MainMenuView implements InterfGereVendasView{
         return Input.lerInt();
     }
 
+    public int inQueryNumProdutos(){
+        System.out.println("Insira o número de Produtos");
+        return Input.lerInt();
+    }
+
     public void outQuery2(AbstractMap.SimpleEntry<Integer,Integer> query2, String s){
         int query2Vendas = query2.getKey();
         int query2Clientes = query2.getValue();
@@ -85,10 +90,10 @@ public class MainMenuView implements InterfGereVendasView{
 
     public void outQuery3or4(TripleInt query4){
         for(int i = 1; i < 13; i++){
+            System.out.println("-------- Início mês " + i + " ----------");
             System.out.println(query4.getInt1()[i-1]);
             System.out.println(query4.getInt2()[i-1]);
             System.out.println(query4.getInt3()[i-1]);
-            System.out.println("-------- Fim mês " + i + " ----------");
         }
     }
 
@@ -96,6 +101,13 @@ public class MainMenuView implements InterfGereVendasView{
         for (QuantidadeString q: t) {
             System.out.println("Produto: " + q.getString() + " Quantidade: " + q.getQuantidade());
         }
+    }
+
+    public void outQuery6(AbstractMap.SimpleEntry<Cat_Produtos, Integer> query6){
+        for(String s : query6.getKey().getProdutos()){
+            System.out.println(s);
+        }
+        System.out.println("Número de Clientes distintos: " + query6.getValue());
     }
 
     public void outQuery7(List<AbstractMap.SimpleEntry<String, Double>> l, int filial){
@@ -113,7 +125,7 @@ public class MainMenuView implements InterfGereVendasView{
 
     public void outQuery9(TreeSet<ClientQuantFat> t){
         for(ClientQuantFat s : t){
-            System.out.println("Cliente: " + s.getString() + " Faturação: " + s.getFat());
+            System.out.println("Cliente: " + s.getString() + " Faturacao: " + s.getFat() + " Quantidade: " + s.getQuantidade());
         }
     }
 }

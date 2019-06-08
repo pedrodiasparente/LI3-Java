@@ -351,6 +351,42 @@ public class Model implements InterfGereVendasModel{
 
         return ret;
     }
+//query6 toda jabardice
+    public AbstractMap.SimpleEntry<Cat_Produtos,Integer> query6(int x) {
+        Map<Integer, String> lista = new TreeMap<>(Collections.reverseOrder());
+        Cat_Produtos cat = new Cat_Produtos();
+        int fat = 0;
+        for (Map.Entry<String, Faturacao> e : this.fatGlobal.getFatGlobal().entrySet()) {
+            for (int i = 0; i < 3; i++) {
+                for (int j = 0; j < 12; j++) {
+                    fat += e.getValue().getnVendasN()[i][j] + e.getValue().getnVendasP()[i][j];
+                }
+            }
+            lista.put(fat, e.getKey());
+            fat = 0;
+        }
+        int k = 0;
+
+        for (String s : lista.values()) {
+            if (k == x) break;
+            else {
+                cat.add(s);
+                k++;
+            }
+        }
+        int totClientes = 0;
+
+        for(int i = 0; i < 3; i++){
+            for(String s : cat.getProdutos()){
+                for (Map.Entry<String, TreeMap<String, InfoProd>> m : this.gestFilial.get(i).getClientes().entrySet()) {
+                    if(m.getValue().containsKey(s)){
+                        totClientes++;
+                    }
+                }
+            }
+        }
+        return new AbstractMap.SimpleEntry<>(cat,totClientes);
+    }
 
     public List<AbstractMap.SimpleEntry<String, Double>> query7(int filial) {
         double fat = 0;
@@ -381,7 +417,7 @@ public class Model implements InterfGereVendasModel{
     public ArrayList<String> query8(int x){
         ArrayList<String> ret = new ArrayList<>();
         TreeMap<String, HashMap<String, String>> clientesProdutos = new TreeMap<>();
-        TreeMap<Integer, String> clientesPorProduto = new TreeMap<>(Collections.reverseOrder());
+        TreeMap<QuantidadeString, String> clientesPorProduto = new TreeMap<>(new QuantidadeComparator());
         int i, total = 0;
 
         for(String c : this.clientes.getClientes()){
@@ -397,7 +433,7 @@ public class Model implements InterfGereVendasModel{
         }
 
         for(Map.Entry<String, HashMap<String, String>> entry : clientesProdutos.entrySet()){
-            clientesPorProduto.put(entry.getValue().size(), entry.getKey());
+            clientesPorProduto.put(new QuantidadeString(entry.getKey(), entry.getValue().size()), entry.getKey());
         }
 
         i = x;
@@ -417,31 +453,30 @@ public class Model implements InterfGereVendasModel{
         double fatTotal;
 
         for(GestFilial g : this.gestFilial.values()){
-            try {
-                for (Map.Entry<String, InfoProd> entry : g.getClientes().get(produto).entrySet()) {
+            for(Map.Entry<String,TreeMap<String,InfoProd>> m : g.getClientes().entrySet()) {
+                if(m.getValue().containsKey(produto)){
                     quantTotal = 0;
                     fatTotal = 0;
-                    for (double i : entry.getValue().getQuantP()) {
+                    for (double i : m.getValue().get(produto).getQuantP()) {
                         quantTotal += i;
                     }
-                    for (double i : entry.getValue().getQuantP()) {
+                    for (double i : m.getValue().get(produto).getQuantN()) {
                         quantTotal += i;
                     }
-                    for (double i : entry.getValue().getPrecoP()) {
+                    for (double i : m.getValue().get(produto).getPrecoP()) {
                         fatTotal += i;
                     }
-                    for (double i : entry.getValue().getPrecoN()) {
+                    for (double i : m.getValue().get(produto).getPrecoN()) {
                         fatTotal += i;
                     }
-                    if (prods.containsKey(entry.getKey())) {
-                        prods.get(entry.getKey()).addQuantidade(quantTotal);
-                        prods.get(entry.getKey()).addFat(fatTotal);
+                    if (prods.containsKey(m.getKey())) {
+                        prods.get(m.getKey()).addQuantidade(quantTotal);
+                        prods.get(m.getKey()).addFat(fatTotal);
                     } else {
-                        prods.put(entry.getKey(), new ClientQuantFat(entry.getKey(), quantTotal, fatTotal));
+                        prods.put(m.getKey(), new ClientQuantFat(m.getKey(), quantTotal, fatTotal));
                     }
                 }
             }
-            catch (NullPointerException e){;}
         }
         for (ClientQuantFat cqf : prods.values()){
             ret.add(cqf);

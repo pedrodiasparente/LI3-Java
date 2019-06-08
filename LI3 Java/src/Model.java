@@ -484,7 +484,7 @@ public class Model implements InterfGereVendasModel{
         return ret;
     }
 
-    public ArrayList<FaturacaoMesFilial> query10(){
+    public ArrayList<FaturacaoMesFilial> query10(String prod){
         ArrayList<FaturacaoMesFilial> ret = new ArrayList<>();
         int mes;
         double fat;
@@ -495,13 +495,13 @@ public class Model implements InterfGereVendasModel{
 
         for(Map.Entry<Integer, GestFilial> filial : this.gestFilial.entrySet()){
             for(mes = 0; mes < 12; mes++){
-                ret.get(mes).getFatFilial().put(filial.getKey(), new HashMap<>());
+                ret.get(mes).getFatFilial().put(filial.getKey(), 0.0);
             }
             for(TreeMap<String, InfoProd> treeProds :  filial.getValue().getClientes().values()){
-                for (Map.Entry<String, InfoProd> produto : treeProds.entrySet()){
+                if(treeProds.containsKey(prod)){
                     for (mes = 0; mes < 12; mes++) {
-                        fat = produto.getValue().getPrecoPMes(mes) + produto.getValue().getPrecoNMes(mes);
-                        ret.get(mes).addFatFilial(produto.getKey(), fat, filial.getKey());
+                        fat = treeProds.get(prod).getPrecoPMes(mes) + treeProds.get(prod).getPrecoNMes(mes);
+                        ret.get(mes).addFatFilial(fat, filial.getKey());
                     }
                 }
             }

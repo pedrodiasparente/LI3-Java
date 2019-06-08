@@ -6,7 +6,7 @@ public class MainMenuView implements InterfGereVendasView{
     private List<String> opcoes;
 
     public MainMenuView(){
-        String[] options = {"query1","query2", "query3", "query4", "query5", "query6", "query7", "query8", "query9", "query10", "Ler dos Logs", "Save Model", "Load Model"};
+        String[] options = {"query1","query2", "query3", "query4", "query5", "query6", "query7", "query8", "query9", "query10", "Ler dos Logs", "Save Model", "Load Model", "Query Estatistica"};
         this.opcoes = Arrays.asList(options);
         this.op = 0;
     }
@@ -159,5 +159,27 @@ public class MainMenuView implements InterfGereVendasView{
         System.out.println("Total de clientes que não compraram: " + ClientNCompr);
         System.out.println("Vendas gratuitas: " + data.getNumVendasZero());
         System.out.println("Faturacao Total: " + data.getFatTotal());
+    }
+
+    public void outQueryEstatistica(Estatistica e) {
+        System.out.println("numero de compras por mes");
+        for(int i = 0; i < 12; i++){
+            System.out.println("Mes " + i + "Compras: " + e.getCompraspMes()[i]);
+        }
+        System.out.println("Faturacao Total: " + e.getFatTotal());
+        System.out.println("Faturacao por mes e filial");
+        for (int i = 0; i < 12; i++){
+            System.out.println("Mes " + i);
+            for (int j = 0; j < 3; j++){
+                System.out.println("Filial");
+                System.out.println(e.getFat().get(i).get(j));
+            }
+        }
+        for (int i = 0; i < 3; i++){
+            System.out.println("Filial " + i);
+            for (int j = 0; j < 12; j++){
+                System.out.println(e.getClienteBuy().get(i).get(j));
+            }
+        }
     }
 }

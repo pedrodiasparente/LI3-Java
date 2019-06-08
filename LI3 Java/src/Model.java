@@ -222,7 +222,7 @@ public class Model implements Serializable, InterfGereVendasModel{
         TreeSet<String> t = new TreeSet<>();
         for(Map.Entry<String,Faturacao> m : this.fatGlobal.getFatGlobal().entrySet()) {
             val = 0;
-            for (int i = 0; i < 3; i++) {
+            for (int i = 0; i < this.getGestFilial().size(); i++) {
                 for (int j = 0; j < 12; j++) {
                     if (m.getValue().getnVendasP()[i][j] != 0) val = 1;
                     if (m.getValue().getnVendasN()[i][j] != 0) val = 1;
@@ -270,12 +270,12 @@ public class Model implements Serializable, InterfGereVendasModel{
         Cat_Clientes c = new Cat_Clientes();
         int trigger;
         for(Map.Entry<String,Faturacao> m : this.fatGlobal.getFatGlobal().entrySet()){
-            for(int i = 0; i < 3; i++) {
+            for(int i = 0; i < this.getGestFilial().size(); i++) {
                 quantVendas += m.getValue().getnVendasP()[i][mes - 1];
                 quantVendas += m.getValue().getnVendasN()[i][mes - 1];
             }
         }
-        for (int i = 0; i < 3; i++) {
+        for (int i = 0; i < this.getGestFilial().size(); i++) {
             for (Map.Entry<String, TreeMap<String, InfoProd>> m : this.gestFilial.get(i).getClientes().entrySet()) {
                 trigger = 1;
                 String key = m.getKey();
@@ -301,7 +301,7 @@ public class Model implements Serializable, InterfGereVendasModel{
     public TripleInt query3(String client){
         TripleInt res = new TripleInt();
         int[] triggers = new int[12];
-        for (int i = 0; i < 3; i++) {
+        for (int i = 0; i < this.getGestFilial().size(); i++) {
             for (Map.Entry<String, InfoProd> m : this.gestFilial.get(i).getClientes().get(client).entrySet()) {
                 Arrays.fill(triggers,1);
                 res.setInt1(res.addArraysInt(res.getInt1(),m.getValue().getNVendasP()));
@@ -331,7 +331,7 @@ public class Model implements Serializable, InterfGereVendasModel{
         res.setInt1(res.addArraysMatInt(res.getInt1(), f.getnVendasP(), f.getnVendasN()));
 
         res.setInt3(res.addArraysMatInt(res.getInt3(), f.getPrecoTotalP(), f.getPrecoTotalN()));
-        for(int k = 0; k < 3;k++) {
+        for(int k = 0; k < this.getGestFilial().size();k++) {
             for (Map.Entry<String, TreeMap<String, InfoProd>> m : this.gestFilial.get(k).getClientes().entrySet()) {
                 for (int i = 0; i < 12; i++) {
                     try {
@@ -386,7 +386,7 @@ public class Model implements Serializable, InterfGereVendasModel{
         int quant;
         for (Map.Entry<String, Faturacao> e : this.fatGlobal.getFatGlobal().entrySet()) {
             quant = 0;
-            for (int i = 0; i < 3; i++) {
+            for (int i = 0; i < this.getGestFilial().size(); i++) {
                 for (int j = 0; j < 12; j++) {
                     quant += e.getValue().getQuantP()[i][j] + e.getValue().getQuantN()[i][j];
                 }
@@ -398,7 +398,7 @@ public class Model implements Serializable, InterfGereVendasModel{
         int k = 0;
         for(QuantidadeString n : lista){
             totClientes = 0;
-            for(int i = 0; i < 3; i++){
+            for(int i = 0; i < this.getGestFilial().size(); i++){
                 for (Map.Entry<String, TreeMap<String, InfoProd>> m : this.gestFilial.get(i).getClientes().entrySet()) {
                     if(m.getValue().containsKey(n.getString())){
                         totClientes++;
@@ -431,7 +431,7 @@ public class Model implements Serializable, InterfGereVendasModel{
 
         int j = 0;
         for (Map.Entry<Double,String> aux: lista.entrySet()) {
-            if (j==3) break;
+            if (j == this.getGestFilial().size()) break;
             AbstractMap.SimpleEntry<String,Double> par = new AbstractMap.SimpleEntry<>(aux.getValue(),aux.getKey());
             l.add(par);
             j++;
@@ -445,7 +445,7 @@ public class Model implements Serializable, InterfGereVendasModel{
         ArrayList<String> ret = new ArrayList<>();
         TreeMap<String, HashMap<String, String>> clientesProdutos = new TreeMap<>();
         TreeMap<QuantidadeString, String> clientesPorProduto = new TreeMap<>(new QuantidadeComparator());
-        int i, total = 0;
+        int i = 0;
 
         for(String c : this.clientes.getClientes()){
             clientesProdutos.put(c, new HashMap<>());
@@ -536,6 +536,49 @@ public class Model implements Serializable, InterfGereVendasModel{
         }
 
         return ret;
+    }
+
+    public Estatistica estatistica() {
+        Estatistica estat = new Estatistica();
+        int[] compras = new int[12];
+        int tot = 0;
+        TreeMap<Integer, Double> filialFat = new TreeMap<>();
+        TreeMap<Integer, TreeMap<Integer, Double>> mesFilialFat = new TreeMap<>();
+        TreeMap<Integer, Integer> filialCliente = new TreeMap<>();
+        TreeMap<Integer, TreeMap<Integer, Integer>> clientesBuy = new TreeMap<>();
+
+        for (Map.Entry<String, Faturacao> e : this.fatGlobal.getFatGlobal().entrySet()) {
+            for (int j = 0; j < 3; j++) {
+                for (int i = 0; i < 12; i++) {
+                    tot += e.getValue().getPrecoTotalN()[j][i] + e.getValue().getPrecoTotalP()[j][i];
+                    compras[i] += e.getValue().getnVendasP()[j][i] + e.getValue().getnVendasN()[j][i];
+                    filialFat.put(i, e.getValue().getPrecoTotalN()[j][i] + e.getValue().getPrecoTotalP()[j][i]);
+                    mesFilialFat.put(j, filialFat);
+                }
+            }
+        }
+
+        int totCliente = 0;
+        for(Map.Entry<Integer,GestFilial> g : this.gestFilial.entrySet()) {
+            for (Map.Entry<String, TreeMap<String, InfoProd>> m : g.getValue().getClientes().entrySet()) {
+                for(int j = 0; j < 12; j++){
+                    for (Map.Entry<String, InfoProd> t : m.getValue().entrySet()) {
+                        if(t.getValue().getQuantP()[j] != 0 || t.getValue().getQuantN()[j] != 0){
+                            totCliente++;
+                        }
+                    }
+                    filialCliente.put(j,totCliente);
+                    totCliente = 0;
+                }
+            }
+            clientesBuy.put(g.getKey(), filialCliente);
+        }
+        estat.setCompraspMes(compras);
+        estat.setFatTotal(tot);
+        estat.setFat(mesFilialFat);
+        estat.setClienteBuy(clientesBuy);
+
+        return estat;
     }
 }
 

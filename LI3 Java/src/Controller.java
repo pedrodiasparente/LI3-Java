@@ -110,6 +110,9 @@ public class Controller implements InterfGereVendasControlador{
                     String fichLoad = this.view.lerNomeFich();
                     this.model.loadModel(fichLoad);
                     break;
+                case 14:
+                    this.view.outQueryEstatistica(this.model.estatistica());
+                    break;
             }
         } while (view.getOP()!=0);
         System.out.println("See ya next time, partner...");

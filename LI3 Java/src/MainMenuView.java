@@ -6,7 +6,7 @@ public class MainMenuView implements InterfGereVendasView{
     private List<String> opcoes;
 
     public MainMenuView(){
-        String[] options = {"Ler dos Logs","query1","query2", "query3", "query4"};
+        String[] options = {"Ler dos Logs","query1","query2", "query3", "query4", "query5"};
         this.opcoes = Arrays.asList(options);
         this.op = 0;
     }
@@ -68,12 +68,12 @@ public class MainMenuView implements InterfGereVendasView{
         System.out.println(s + query2Vendas + " " + query2Clientes);
     }
 
-    public String inQuery3(){
+    public String inQueryCliente(){
         System.out.println("Insira Cliente");
         return Input.lerString();
     }
 
-    public String inQuery4(){
+    public String inQueryProduto(){
         System.out.println("Insira Produto");
         return Input.lerString();
     }
@@ -84,6 +84,12 @@ public class MainMenuView implements InterfGereVendasView{
             System.out.println(query4.getInt2()[i-1]);
             System.out.println(query4.getInt3()[i-1]);
             System.out.println("-------- Fim mês " + i + " ----------");
+        }
+    }
+
+    public void outQuery5(TreeSet<QuantidadeProduto> t){
+        for (QuantidadeProduto q: t) {
+            System.out.println("Produto: " + q.getProduto() + " Quantidade: " + q.getQuantidade());
         }
     }
 }

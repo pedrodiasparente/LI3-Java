@@ -324,5 +324,33 @@ public class Model implements InterfGereVendasModel{
         return res;
     }
 
+    public TreeSet<QuantidadeProduto> query5(String cliente){
+        TreeSet<QuantidadeProduto> ret = new TreeSet<>(new QuantidadeComparator());
+        TreeMap<String, QuantidadeProduto> prods = new TreeMap<>();
+        int quantTotal;
+
+
+        for(GestFilial g : this.gestFilial.values()){
+            for(Map.Entry<String, InfoProd> entry  : g.getClientes().get(cliente).entrySet()){
+                quantTotal = 0;
+                for(int i : entry.getValue().getQuantP()){
+                    quantTotal += i;
+                }
+                for(int i : entry.getValue().getQuantN()){
+                    quantTotal += i;
+                }
+                if(prods.containsKey(entry.getKey())){
+                    prods.get(entry.getKey()).addQuantidade(quantTotal);
+                } else{
+                    prods.put(entry.getKey(), new QuantidadeProduto(entry.getKey(), quantTotal));
+                }
+            }
+        }
+        for (QuantidadeProduto qp : prods.values()){
+            ret.add(qp.clone());
+        }
+
+        return ret;
+    }
 }
 

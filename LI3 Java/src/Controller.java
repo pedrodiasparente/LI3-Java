@@ -25,26 +25,47 @@ public class Controller implements InterfGereVendasControlador{
             this.view.runMenu();
             switch (view.getOP()){
                 case 1:
+                    Crono.start();
                     System.out.println("heyo");
+                    Crono.stop();
+                    System.out.println(Crono.print());
                     break;
                 case 2:
+                    Crono.start();
                     this.view.outQuery1(this.model.query1());
+                    Crono.stop();
+                    System.out.println(Crono.print());
                     break;
                 case 3:
                     int mes = this.view.inQuery2();
+                    Crono.start();
                     this.view.outQuery2(this.model.query2Total(mes), "Geral: ");
                     this.view.outQuery2(this.model.query2Filial(mes,1), "Filial 1: ");
                     this.view.outQuery2(this.model.query2Filial(mes,2), "Filial 2: ");
                     this.view.outQuery2(this.model.query2Filial(mes,3), "Filial 3: ");
+                    Crono.stop();
+                    System.out.println(Crono.print());
                     break;
                 case 4:
-                    String cliente = this.view.inQuery3();
+                    String cliente = this.view.inQueryCliente();
+                    Crono.start();
                     this.view.outQuery3or4(this.model.query3(cliente));
+                    Crono.stop();
+                    System.out.println(Crono.print());
                     break;
                 case 5:
-                    String prod = this.view.inQuery4();
+                    String prod = this.view.inQueryProduto();
+                    Crono.start();
                     this.view.outQuery3or4(this.model.query4(prod));
+                    Crono.stop();
+                    System.out.println(Crono.print());
                     break;
+                case 6:
+                    cliente = this.view.inQueryCliente();
+                    Crono.start();
+                    this.view.outQuery5(this.model.query5(cliente));
+                    Crono.stop();
+                    System.out.println(Crono.print());
             }
         } while (view.getOP()!=0);
         System.out.println("See ya next time, partner...");
